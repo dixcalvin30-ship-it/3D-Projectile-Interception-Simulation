@@ -1,0 +1,416 @@
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Define variables
+
+accel = -9.81
+
+# Velocity of Projectile 1
+
+while True:
+    p = input("How will inital velocity of projectile 1 be input? (vector or magnitude/angles):")
+    if p == 'vector' or p == 'magnitude' or p == 'angles':
+        break
+    else:
+        print("Invalid input")
+    
+if p == 'vector':
+    
+    while True:
+        
+        vi_1 = np.array(list(map(float, input("Enter relative inital velocity of projectile 1 as vector separated by spaces (vx,vy,vz)(m/s):").split())))
+        
+        if len(vi_1) == 3:
+            
+            vi_1_x = vi_1[0]
+
+            vi_1_y = vi_1[1]
+
+            vi_1_z = vi_1[2]
+
+            v1_mag = np.linalg.norm(vi_1)
+
+            v1_unit = vi_1 / v1_mag
+
+            ele_angle_1 = np.degrees(np.atan(vi_1_y / (vi_1_x**2 + vi_1_z**2)**(1/2)))
+
+            x_angle_1 = np.degrees(np.atan(vi_1_z / vi_1_x))
+            
+            break
+
+        else:
+            print("Invalid input")
+
+
+if p == 'angles' or p == 'magnitude' or p == 'magnitude/angles':
+
+    v1_mag = float(input("Enter inital speed of projectile 1 (m/s):"))
+
+    ele_angle_1 = float(input("Enter elevation angle for inital velcotiy of projectile 1 (degrees):"))
+
+    x_angle_1 = float(input("Enter angle from x-axis for inital velocity of projectile 1 (degrees):"))
+
+    unit_vx1 = ((np.cos(np.radians(ele_angle_1))**2) / (1 + (np.tan(np.radians(x_angle_1)))**2))**(1/2)
+
+    unit_vy1 = np.sin(np.radians(ele_angle_1))
+
+    unit_vz1 = np.cos(np.radians(ele_angle_1)) * np.tan(np.radians(x_angle_1)) * ((np.tan(np.radians(x_angle_1)))**2 + 1)**(-1/2)
+
+    v1_unit = np.array([unit_vx1, unit_vy1, unit_vz1])
+
+    vi_1 = v1_unit * v1_mag
+
+    vi_1_x = vi_1[0]
+
+    vi_1_y = vi_1[1]
+
+    vi_1_z = vi_1[2]
+        
+
+
+# Starting Position of Projectile 1
+
+while True:
+    p = input("How will inital position of projectile 1 be input? (vector or magnitude/angles):")
+    if p == 'vector' or p == 'magnitude' or p == 'angles':
+        break
+    else:
+        print("Invalid input")
+   
+if p == 'vector':
+    while True:
+    
+        ri_1 = np.array(list(map(float, input("Enter relative inital position of projectile 1 as 3 numbers separated by spaces (x1,y1,z1)(m):").split())))
+
+        if len(ri_1) == 3:
+
+            xi_1 = ri_1[0]
+
+            yi_1 = ri_1[1]
+
+            zi_1 = ri_1[2]
+
+            break
+
+        else:
+            print("Invalid input")
+
+if p == 'angles' or p == 'magnitude' or p == 'magnitude/angles':
+
+    r1_mag = float(input("Enter realative inital distance of projectile 1 (m):"))
+
+    ele_angle_r1 = float(input("Enter elevation angle for inital position of projectile 1 (degrees):"))
+
+    x_angle_r1 = float(input("Enter angle from x-axis for inital position of projectile 1 (degrees):"))
+
+    unit_x1 = ((np.cos(np.radians(ele_angle_r1))**2) / (1 + (np.tan(np.radians(x_angle_r1)))**2))**(1/2)
+
+    unit_y1 = np.sin(np.radians(ele_angle_r1))
+
+    unit_z1 = np.cos(np.radians(ele_angle_r1)) * np.tan(np.radians(x_angle_r1)) * ((np.tan(np.radians(x_angle_r1)))**2 + 1)**(-1/2)
+
+    r1_unit = np.array([unit_x1, unit_y1, unit_z1])
+
+    ri_1 = r1_unit * r1_mag
+
+    xi_1 = ri_1[0]
+
+    yi_1 = ri_1[1]
+
+    zi_1 = ri_1[2]
+
+# Speed of Projectile 2
+
+v2_mag = float(input("Enter inital speed of projectile 2 (m/s):"))
+
+
+# Starting Position of Projectile 2
+
+while True:
+    p = input("How will inital position of projectile 2 be input? (vector or magnitude/angles):")
+    if p == 'vector' or p == 'magnitude' or p == 'angles':
+        break
+    else:
+        print("Invalid input")
+   
+if p == 'vector':
+    while True:
+    
+        ri_2 = np.array(list(map(float, input("Enter relative inital position of projectile 2 as 3 numbers separated by spaces (x1,y1,z1)(m):").split())))
+
+        if len(ri_2) == 3:
+
+            xi_2 = ri_2[0]
+
+            yi_2 = ri_2[1]
+
+            zi_2 = ri_2[2]
+
+            break
+
+        else:
+            print("Invalid input")
+
+if p == 'angles' or p == 'magnitude' or p == 'magnitude/angles':
+    
+    r2_mag = float(input("Enter realative inital distance of projectile 2 (m):"))
+
+    ele_angle_r2 = float(input("Enter elevation angle for inital position of projectile 2 (degrees):"))
+
+    x_angle_r2 = float(input("Enter angle from x-axis for inital position of projectile 2 (degrees):"))
+
+    unit_x2 = ((np.cos(np.radians(ele_angle_r2))**2) / (1 + (np.tan(np.radians(x_angle_r2)))**2))**(1/2)
+
+    unit_y2 = np.sin(np.radians(ele_angle_r2))
+
+    unit_z2 = np.cos(np.radians(ele_angle_r2)) * np.tan(np.radians(x_angle_r2)) * ((np.tan(np.radians(x_angle_r2)))**2 + 1)**(-1/2)
+
+    r2_unit = np.array([unit_x2, unit_y2, unit_z2])
+
+    ri_2 = r2_unit * r2_mag
+
+    xi_2 = ri_2[0]
+
+    yi_2 = ri_2[1]
+
+    zi_2 = ri_2[2]
+
+
+# Calculate Time of Flight for Projectile 1
+
+t_f = (vi_1_y + (vi_1_y**2 + 2*-accel*yi_1)**(1/2)) / -accel
+
+
+# Calculate position of Projectile 1 with respect to time from t = 0 to t = t_f
+
+step = int(round(t_f*100))
+
+t = np.linspace(0,t_f,step)
+
+x_1 = xi_1 + vi_1_x * t
+
+y_1 = yi_1 + vi_1_y * t + accel * .5* t**2
+
+z_1 = z1_t = zi_1 + vi_1_z * t
+
+
+# Calculate possible times of impact where s is time variable of Projectile 2
+
+t_impact_after = []
+
+for i in range(len(t)):
+    
+    times = t[i]
+    
+    a = (1/4) * accel**2
+    
+    b = -y_1[i] * accel - v2_mag**2 + accel * yi_2
+
+    c = (x_1[i] - xi_2)**2 + y_1[i]**2 + (z_1[i] - zi_2)**2 - 2 * y_1[i] * yi_2 + yi_2**2
+    
+    s_sol = np.roots([a,0,b,0,c])
+    
+    s_sol_filtered = [num for num in s_sol if num.imag == 0]
+    
+    for j in range(len(s_sol_filtered)):
+        
+        s_test = s_sol_filtered[j]
+        
+        if s_test > 0 and times > s_test:
+            
+            t_impact_after.append(times)
+
+discont = 0
+for i in range(len(t_impact_after)-1):
+    if round(t_impact_after[i+1] - t_impact_after[i],4) != round(t[1],4):
+        discont += 1
+        t_impact_after1, t_impact_after2 = np.array_split(t_impact_after, [i+1])
+        break
+
+            
+# Dsiplay possibles times of impact and recieve input
+
+if len(t_impact_after) > 0:
+        
+    while True:
+        if discont == 0:
+        
+            print(f"Possible times for interseption are from {math.ceil(t_impact_after[0] * 100) / 100}s to {math.floor(t_impact_after[-1] * 100) / 100}s")
+        
+            t_collide = float(input('Enter desired time for impact (s):'))
+        
+            if t_collide >= t_impact_after[0] and t_collide <= t_impact_after[-1]:
+            
+                break
+            
+            print("Time not within range")
+
+        else:
+            print(f"Possible times for interseption are from {math.ceil(t_impact_after1[0] * 100) / 100}s to {math.floor(t_impact_after1[-1] * 100) / 100}s and from {math.ceil(t_impact_after2[0] * 100) / 100}s to {math.floor(t_impact_after2[-1] * 100) / 100}s")
+        
+            t_collide = float(input('Enter desired time for impact (s):'))
+        
+            if t_collide >= t_impact_after1[0] and t_collide <= t_impact_after1[-1] or t_collide >= t_impact_after2[0] and t_collide <= t_impact_after2[-1]:
+            
+                break
+            
+            print("Time not within range")
+
+    
+
+    
+    # Calculate postion at desired time, t0-t1
+    
+    t1 = np.linspace(0,t_collide,int(round(t_collide*100)))
+    
+    x1_t0_t1 = xi_1 + vi_1_x * t1
+    
+    y1_t0_t1 = yi_1 + vi_1_y * t1 + accel * .5* t1**2
+    
+    z1_t0_t1 = zi_1 + vi_1_z * t1
+
+    
+    # Calculate s for desired time 
+    
+    a = (1/4)*accel**2
+    
+    b = -(y1_t0_t1[-1] * accel) - v2_mag**2 + accel * yi_2
+    
+    c = (x1_t0_t1[-1] - xi_2)**2 + y1_t0_t1[-1]**2 + (z1_t0_t1[-1] - zi_2)**2 - 2 * y1_t0_t1[-1] * yi_2 + yi_2**2
+    
+    s1_sol = np.roots([a,0,b,0,c])
+
+    for i in range(len(s1_sol)):
+        
+        s1_test = s1_sol[i]
+        
+        if s1_test >= 0 and t_collide >= s1_test:
+            
+            s = s1_test
+    
+
+    # Generate data for postition of Projectile 2
+    
+    unit_vx2 = (x1_t0_t1[-1] - xi_2) / (v2_mag * s)
+    
+    unit_vy2 = (y1_t0_t1[-1] - yi_2 - (1/2) * accel * s**2) / (v2_mag * s)
+    
+    unit_vz2 = (z1_t0_t1[-1] - zi_2) / (v2_mag * s)
+
+    v2_unit = np.array([unit_vx2,unit_vy2,unit_vz2])
+
+    vi_2 = v2_mag * v2_unit
+    
+    vi_2_x = vi_2[0]
+    
+    vi_2_y = vi_2[1]
+    
+    vi_2_z = vi_2[2]
+
+
+    # Calculate launch angles
+
+    ele_angle_2 = np.degrees(np.atan(unit_vy2 / (unit_vz2**2 + unit_vx2**2)**(1/2)))
+
+    x_angle_2 = np.degrees(np.atan(unit_vz2 / unit_vx2))
+
+    
+    # Create time vector for projectile 2 where position values before time of launch are zero
+    
+    t2 = t1 - (t_collide - s)
+    
+    t2[t2 < 0] = 0
+
+    
+    # Create positional data for projectile 2 with respect to time 
+    
+    x_2 = xi_2 + vi_2_x * t2
+    
+    y_2 = yi_2 + vi_2_y * t2 + accel * .5* t2**2
+    
+    z_2 = zi_2 + vi_2_z * t2
+
+    
+    # Create 3D graph
+    
+    fig = plt.figure(figsize=(5,5))
+    
+    ax = fig.add_subplot(projection='3d')
+    
+    ax.plot(x1_t0_t1, 
+            z1_t0_t1, 
+            y1_t0_t1, 
+            label='Projectile 1', 
+            color ='blue')
+    
+    ax.plot(x_2, 
+            z_2, 
+            y_2, 
+            label='Projectile 2', 
+            color ="red")
+    
+    ax.plot(x_2[-1],
+            z_2[-1],
+            y_2[-1],
+            'y*',
+            label='Point of Impact',
+            markersize=10)
+    
+    ax.plot(x_2[0],
+            z_2[0],
+            y_2[0],
+            'ro',
+            markersize=5)
+    
+    ax.plot(x1_t0_t1[0],
+            z1_t0_t1[0],
+            y1_t0_t1[0],
+            'bo',
+            markersize=5)
+    
+    plt.legend()
+    
+    plt.tight_layout()
+    
+    plt.savefig('projectile.png')
+    
+    plt.show()
+
+    
+    # Display calculated data
+
+    print(f"Projectile 1")
+    print(f"Inital position (x,y,z)(m): {np.round(ri_1,2)}")
+    print(f"Launch speed (m/s): {v1_mag:.2f}")
+    print(f"Inital velocity (vx,vy,vz)(m/s): {np.round(vi_1,2)}")
+    print(f"Launch direction as unit vector: {np.round(v1_unit,2)}")
+    print(f"Inital elevation angle (degress): {ele_angle_1:.2f}")
+    print(f"Inital angle from x-axis (degrees): {x_angle_1:.2f}")
+    print(f"Time of flight without interseption (s): {t_f:.2f}")
+    print(f"Time of launch (s): {0:.2f}")
+
+    print(" ")
+
+    print(f"Projectile 2")
+    print(f"Inital position (x,y,z)(m): {np.round(ri_2,2)}")
+    print(f"Launch speed (m/s): {v2_mag:.2f}")
+    print(f"Inital velocity (vx,vy,vz)(m/s): {np.round(vi_2,2)}")
+    print(f"Launch direction as unit vector: {np.round(v2_unit,2)}")
+    print(f"Inital elevation angle (degress): {ele_angle_2:.2f}")
+    print(f"Inital angle from x-axis (degrees): {x_angle_2:.2f}")
+    print(f"Time of flight(s): {s:.2f}")
+    print(f"Time of launch (s): {(t_collide-s):.2f}") 
+
+    print(" ")
+    
+    print(f"Time of interseption (s): {t_collide}")
+    print(f"Location of interseption (x,y,z)(m): [{x_2[-1]:.2f} {y_2[-1]:.2f} {z_2[-1]:.2f}]")
+
+# Display results if no interseption is possible
+
+else:
+    
+    print(f"No possible interseption within given parameters")
+    
