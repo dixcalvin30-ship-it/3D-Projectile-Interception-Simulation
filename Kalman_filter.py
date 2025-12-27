@@ -1,12 +1,13 @@
-def K_filter(z, number):
-    dt = 0.01
+def K_filter(z, number, dt):
 
     if number == 1:
+
+        K_filter.dt = dt
         
         K_filter.x = np.array([[z[0][0]],
-                              [50],
+                              [70],
                               [z[1][0]],
-                              [50],
+                              [110],
                               [z[2][0]],
                               [50]])
         
@@ -25,7 +26,7 @@ def K_filter(z, number):
 
         K_filter.HT = K_filter.H.T
 
-        K_filter.R = np.diag((12, 12, 12))
+        K_filter.R = np.diag((16, 16, 16))
 
         K_filter.Q = np.diag((0,0,0,0,0,0))
 
