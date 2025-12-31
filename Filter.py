@@ -1,17 +1,39 @@
-def K_filter(z, number, dt):
-
+def K_filter(z, number, dt, z0):
+    import numpy as np
+    g = -9.81
     if number == 1:
+
+        x1 = z[0][0]
+        y1 = z[1][0]
+        z1 = z[2][0]
+
+        x10 = z0[0][0]
+        y10 = z0[1][0]
+        z10 = z0[2][0]
+        
+        dx = x1 - x10
+        dy = y1 - y10
+        dz = z1 - z10
+
+        x_angle = np.atan(dx/dz)
+        ele_angle = np.atan(dy / ((dx**2 + dz**2)**(1/2)))
+
+        v_MaxMag = 124 * 1.5
+
+        vx = v_MaxMag * ((np.cos(ele_angle)**2) / (1 + (np.tan(x_angle))**2))**(1/2)
+        vy = v_MaxMag * np.sin(ele_angle)
+        vz = v_MaxMag * (np.cos(ele_angle) * np.tan(x_angle) * ((np.tan(x_angle))**2 + 1)**(-1/2))
 
         K_filter.dt = dt
         
-        K_filter.x = np.array([[z[0][0]],
-                              [70],
-                              [z[1][0]],
-                              [110],
-                              [z[2][0]],
-                              [50]])
+        K_filter.x = np.array([[x1],
+                              [vx],
+                              [y1],
+                              [vy + g * dt],
+                              [z1],
+                              [vz]])
         
-        K_filter.P = np.diag((4,4,4,4,4,4))
+        K_filter.P = np.diag((5,5,5,5,5,5))
 
         K_filter.A = np.array([[1, dt, 0, 0, 0, 0],
                                [0, 1, 0, 0, 0, 0],
@@ -26,7 +48,7 @@ def K_filter(z, number, dt):
 
         K_filter.HT = K_filter.H.T
 
-        K_filter.R = np.diag((16, 16, 16))
+        K_filter.R = np.diag((25, 25, 25))
 
         K_filter.Q = np.diag((0,0,0,0,0,0))
 
@@ -56,8 +78,8 @@ def K_filter(z, number, dt):
 
     K_filter.x = x_p + K @ residual
 
-    K_filter.P = P_p - K @ K_filter.H @ P_p
+    K_filter.P = (np.eye(6,6) - K @ K_filter.H) @ P_p
 
     x_p = K_filter.x
 
-    return [K_filter.x[0], K_filter.x[1], K_filter.x[2], K_filter.x[3], K_filter.x[4], K_filter.x[5], K_filter.P, x_p]
+    return [K_filter.x, K_filter.P]
