@@ -7,18 +7,18 @@ def K_filter(z, number, dt, z0):
         y1 = z[1][0]
         z1 = z[2][0]
 
-        x10 = z0[0][0]
-        y10 = z0[1][0]
-        z10 = z0[2][0]
+        xi = z0[0][0]
+        yi = z0[1][0]
+        zi = z0[2][0]
         
-        dx = x1 - x10
-        dy = y1 - y10
-        dz = z1 - z10
+        dx = x1 - xi
+        dy = y1 - yi
+        dz = z1 - zi
 
-        x_angle = np.atan(dx/dz)
+        x_angle = np.atan(dz/dx)
         ele_angle = np.atan(dy / ((dx**2 + dz**2)**(1/2)))
 
-        v_MaxMag = 124 * 1.5
+        v_MaxMag = 124 
 
         vx = v_MaxMag * ((np.cos(ele_angle)**2) / (1 + (np.tan(x_angle))**2))**(1/2)
         vy = v_MaxMag * np.sin(ele_angle)
@@ -29,7 +29,7 @@ def K_filter(z, number, dt, z0):
         K_filter.x = np.array([[x1],
                               [vx],
                               [y1],
-                              [vy + g * dt],
+                              [vy],
                               [z1],
                               [vz]])
         
