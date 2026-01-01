@@ -48,7 +48,7 @@ def K_filter(z, number, dt, z0):
 
         K_filter.HT = K_filter.H.T
 
-        K_filter.R = np.diag((25, 25, 25))
+        K_filter.R = np.diag((20, 20, 20))
 
         K_filter.Q = np.diag((0,0,0,0,0,0))
 
