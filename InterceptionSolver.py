@@ -151,6 +151,9 @@ if len(t_impact_after) > 0:
             'co--', 
             markersize=1, 
             label='Kalman Estimation')
+    ax.set_xlabel('X Position (m)')
+    ax.set_ylabel('Z Position (m)')
+    ax.set_zlabel('Y Position (m)')
     plt.title("Projectile Interseption")
     plt.legend()
     plt.tight_layout()
