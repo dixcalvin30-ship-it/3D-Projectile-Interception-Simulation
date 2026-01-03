@@ -2,23 +2,30 @@ def FilterOutput():
     
     import pandas as pd
     import numpy as np
-    from Filter import K_filter
+    from KalmanFilter import KalmanFilter
 
     df = pd.read_csv('Sensor_readings.csv')
 
     reading_x = df["x reading (m)"]
     reading_y = df["y reading (m)"]
     reading_z = df["z reading (m)"]
-    times_1 = df["time (s)"]
+    times = df["time (s)"]
 
-    signal_x = []
-    signal_z = []
-    signal_y = []
+    signal_x = [reading_x[0]]
+    signal_z = [reading_z[0]]
+    signal_y = [reading_y[0]]
 
-    t_1 = 0
-    t_signal = []
+    estimate_x = [reading_x[0]]
+    estimate_z = [reading_z[0]]
+    estimate_y = [reading_y[0]]
 
-    for i in range(1,len(times_1)):
+    variance_pos = [5]
+    variance_vel = [5]
+
+    t = 0
+    t_signal = [times[0]]
+
+    for i in range(1,len(times)):
         
         z = np.array([[reading_x[i]],
                  [reading_y[i]],
@@ -28,8 +35,8 @@ def FilterOutput():
                  [reading_y[i-1]],
                  [reading_z[i-1]]])
         
-        dt = times_1[1]
-        f = K_filter(z,i,dt,z0)
+        dt = times[1]
+        f = KalmanFilter(z,i,dt,z0)
     
         KalmanEstimate = f[0]
 
@@ -37,14 +44,20 @@ def FilterOutput():
         signal_y.append(reading_y[i])
         signal_z.append(reading_z[i])
 
-        variance = np.diag(f[1])
-    
-        t_1 = times_1[i]
+        estimate_x.append(KalmanEstimate[0][0])
+        estimate_y.append(KalmanEstimate[2][0])
+        estimate_z.append(KalmanEstimate[4][0])
 
-        t_signal.append(t_1)
+        variance = np.diag(f[1])
+        variance_pos.append(variance[0])
+        variance_vel.append(variance[1])
+    
+        t = times[i]
+
+        t_signal.append(t)
         
         if variance[0] <= .05 and variance[1] <= .005:
             
             break
 
-    return [KalmanEstimate, signal_x, signal_y, signal_z, variance, t_1, t_signal]
+    return [KalmanEstimate, signal_x, signal_y, signal_z, t_1, t_signal, estimate_x, estimate_y, estimate_z, variance_pos, variance_vel]
