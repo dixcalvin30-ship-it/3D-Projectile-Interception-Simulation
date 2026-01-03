@@ -1,4 +1,4 @@
-def K_filter(z, number, dt, z0):
+def KalmanFilter(z, number, dt, z0):
     import numpy as np
     g = -9.81
     if number == 1:
@@ -18,19 +18,17 @@ def K_filter(z, number, dt, z0):
         x_angle = np.atan(dz/dx)
         ele_angle = np.atan(dy / ((dx**2 + dz**2)**(1/2)))
 
-        v_MaxMag = 124 
+        v_MaxMag = 125 * 1.2
 
         vx = v_MaxMag * ((np.cos(ele_angle)**2) / (1 + (np.tan(x_angle))**2))**(1/2)
         vy = v_MaxMag * np.sin(ele_angle)
-        vz = v_MaxMag * (np.cos(ele_angle) * np.tan(x_angle) * ((np.tan(x_angle))**2 + 1)**(-1/2))
-
-        K_filter.dt = dt
+        vz = v_MaxMag * np.cos(ele_angle) * np.tan(x_angle) * ((np.tan(x_angle))**2 + 1)**(-1/2)
         
-        K_filter.x = np.array([[x1],
+        K_filter.x = np.array([[xi],
                               [vx],
-                              [y1],
-                              [vy],
-                              [z1],
+                              [yi],
+                              [abs(vy)],
+                              [zi],
                               [vz]])
         
         K_filter.P = np.diag((5,5,5,5,5,5))
