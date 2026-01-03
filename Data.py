@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-x_0 = 0
+x_0 = -300
 y_0 = 0
-z_0 = 0
+z_0 = -300
 v_x = 60
 v_y = 100
 v_z = 40
@@ -14,9 +14,9 @@ rng = np.random.default_rng()
 t_f = (v_y + (v_y**2 + 2*-g*y_0)**(1/2)) / -g
 
 t_1 = np.linspace(0,t_f,int((t_f / .005) + 1))
-x_t = v_x * t_1
-y_t = v_y * t_1 + .5 * g * t_1**2
-z_t = v_z * t_1 
+x_t = x_0 + v_x * t_1
+y_t = y_0 + v_y * t_1 + .5 * g * t_1**2
+z_t = z_0 + v_z * t_1 
 
 samples = rng.normal(loc=0.0, scale=5.0, size=len(t_1))
 
