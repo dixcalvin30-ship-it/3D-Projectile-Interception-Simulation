@@ -24,60 +24,60 @@ def KalmanFilter(z, number, dt, z0):
         vy = v_MaxMag * np.sin(ele_angle)
         vz = v_MaxMag * np.cos(ele_angle) * np.tan(x_angle) * ((np.tan(x_angle))**2 + 1)**(-1/2)
         
-        K_filter.x = np.array([[xi],
+        KalmanFilter.x = np.array([[xi],
                               [vx],
                               [yi],
                               [abs(vy)],
                               [zi],
                               [vz]])
         
-        K_filter.P = np.diag((5,5,5,5,5,5))
+        KalmanFilter.P = np.diag((5,5,5,5,5,5))
 
-        K_filter.A = np.array([[1, dt, 0, 0, 0, 0],
+        KalmanFilter.A = np.array([[1, dt, 0, 0, 0, 0],
                                [0, 1, 0, 0, 0, 0],
                                [0, 0, 1, dt, 0, 0],
                                [0, 0, 0, 1, 0, 0],
                                [0, 0, 0, 0, 1, dt],
                                [0, 0, 0, 0, 0, 1]])
 
-        K_filter.H = np.array([[1, 0, 0, 0, 0, 0],
+        KalmanFilter.H = np.array([[1, 0, 0, 0, 0, 0],
                                [0, 0, 1, 0, 0, 0],
                                [0, 0, 0, 0, 1, 0]])
 
-        K_filter.HT = K_filter.H.T
+        KalmanFilter.HT = KalmanFilter.H.T
 
-        K_filter.R = np.diag((20, 20, 20))
+        KalmanFilter.R = np.diag((20, 20, 20))
 
-        K_filter.Q = np.diag((0,0,0,0,0,0))
+        KalmanFilter.Q = np.diag((0,0,0,0,0,0))
 
-        K_filter.U = np.array([[0],
+        KalmanFilter.U = np.array([[0],
                                [0],
                                [0],
                                [g],
                                [0],
                                [0]])
 
-        K_filter.B =np.array([[0, 0, 0, 0, 0, 0],
+        KalmanFilter.B =np.array([[0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0],
                                [0, 0, 0, dt, 0, 0],
                                [0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0]])
 
-    x_p = K_filter.A @ K_filter.x + K_filter.B @ K_filter.U
+    x_p = KalmanFilter.A @ KalmanFilter.x + KalmanFilter.B @ KalmanFilter.U
 
-    P_p = K_filter.A @ K_filter.P @ K_filter.A.T + K_filter.Q
+    P_p = KalmanFilter.A @ KalmanFilter.P @ KalmanFilter.A.T + KalmanFilter.Q
 
-    S = K_filter.H @ P_p @ K_filter.HT + K_filter.R
+    S = KalmanFilter.H @ P_p @ KalmanFilter.HT + KalmanFilter.R
 
-    K = (P_p @ K_filter.HT) @ (np.linalg.inv(S))
+    K = (P_p @ KalmanFilter.HT) @ (np.linalg.inv(S))
 
-    residual = z - K_filter.H @ x_p
+    residual = z - KalmanFilter.H @ x_p
 
-    K_filter.x = x_p + K @ residual
+    KalmanFilter.x = x_p + K @ residual
 
-    K_filter.P = (np.eye(6,6) - K @ K_filter.H) @ P_p
+    KalmanFilter.P = (np.eye(6,6) - K @ KalmanFilter.H) @ P_p
 
-    x_p = K_filter.x
+    x_p = KalmanFilter.x
 
-    return [K_filter.x, K_filter.P]
+    return [KalmanFilter.x, KalmanFilter.P]
