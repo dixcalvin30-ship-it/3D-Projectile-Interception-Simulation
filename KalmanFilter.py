@@ -27,11 +27,11 @@ def KalmanFilter(z, number, dt, z0):
         KalmanFilter.x = np.array([[xi],
                               [vx],
                               [yi],
-                              [abs(vy)],
+                              [vy],
                               [zi],
                               [vz]])
         
-        KalmanFilter.P = np.diag((5,5,5,5,5,5))
+        KalmanFilter.P = np.diag((20,25,20,25,20,25))
 
         KalmanFilter.A = np.array([[1, dt, 0, 0, 0, 0],
                                [0, 1, 0, 0, 0, 0],
