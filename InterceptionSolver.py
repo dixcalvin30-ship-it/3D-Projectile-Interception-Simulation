@@ -71,7 +71,7 @@ for f1, f2, f3 in r_t:
 # Dsiplay possible times of impact and recieve input
 if len(t_impact_after) > 0:
     while True:
-        print(f"Possible times for interseption are from {math.ceil((t_impact_after[0] + TimeOfPrediction) * 100) / 100}s to {math.floor((t_impact_after[-1] + TimeOfPrediction) * 100) / 100}s")
+        print(f"Possible times for interception are from {math.ceil((t_impact_after[0] + TimeOfPrediction) * 100) / 100}s to {math.floor((t_impact_after[-1] + TimeOfPrediction) * 100) / 100}s")
         t_collide = float(input('Enter desired time for impact (s):')) - TimeOfPrediction
         if t_collide >= (t_impact_after[0]) and t_collide <= (t_impact_after[-1]):
             break
@@ -119,10 +119,16 @@ if len(t_impact_after) > 0:
     # Create 3D graph
     fig = plt.figure(figsize=(5,5))
     ax = fig.add_subplot(projection='3d')
+    ax.plot(estimate_x, 
+            estimate_z, 
+            estimate_y, 
+            'co--', 
+            markersize=1, 
+            label='Projectile 1 (Kalman estimation)')
     ax.plot(x1_t0_t1, 
             z1_t0_t1, 
             y1_t0_t1, 
-            label='Projectile 1', 
+            label='Projectile 1 (prediction)', 
             color ='blue')
     ax.plot(x_2, 
             z_2, 
@@ -140,21 +146,10 @@ if len(t_impact_after) > 0:
             y_2[0],
             'ro',
             markersize=5)
-    ax.plot(x1_t0_t1[0],
-            z1_t0_t1[0],
-            y1_t0_t1[0],
-            'bo',
-            markersize=5)
-    ax.plot(estimate_x, 
-            estimate_z, 
-            estimate_y, 
-            'co--', 
-            markersize=1, 
-            label='Kalman Estimation')
     ax.set_xlabel('X Position (m)')
     ax.set_ylabel('Z Position (m)')
     ax.set_zlabel('Y Position (m)')
-    plt.title("Projectile Interseption")
+    plt.title("Projectile Interception")
     plt.legend()
     plt.tight_layout()
     plt.savefig('projectile.png')
