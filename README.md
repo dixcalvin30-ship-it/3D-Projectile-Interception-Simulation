@@ -1,9 +1,9 @@
-Kalman Estimation and Signal for first 200 interations
+Kalman Estimation and Signal for first 200 iterations
 
 ![Kalman Estimation and Signal for first 200 interations](KalmanEstimationAndSignalFirst.png)
 
 
-Kalman Estimation and Signal for last 200 interations
+Kalman Estimation and Signal for last 200 iterations
 
 ![Kalman Estimation and Signal for last 200 interations](KalmanEstimationAndSignalLast.png)
 
